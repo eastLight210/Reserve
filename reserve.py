@@ -92,8 +92,6 @@ if __name__ == '__main__':
   with open('Member.txt', 'r', encoding='utf-8') as file:
     for line in file:
         memberList.append(line.strip().split(','))
-  
-  print(memberList)
 
   while True:
     url = 'https://athletics.snu.ac.kr/'
@@ -101,6 +99,6 @@ if __name__ == '__main__':
     server_date = server_date.rstrip(' GMT')[5:]
     server_date = datetime.strptime(server_date, '%d %b %Y %H:%M:%S') + timedelta(hours=9)
     print(server_date)
-    if server_date.hour <= 9 and server_date.minute <= 30:
+    if server_date.hour == 9 and server_date.minute >= 30:
       startReserve()
       break
