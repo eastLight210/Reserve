@@ -10,7 +10,7 @@
 
 * Account.txt, Member.txt로 계정 정보와 멤버를 작성하여 폴더에 넣어주세요
 
-# Accout.txt 예시  
+# Account.txt 예시  
 myid  
 mypasswd  
 
