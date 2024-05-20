@@ -13,14 +13,9 @@ from datetime import timedelta
 sunday = datetime.now() + timedelta(days=5)
 sunday = sunday.strftime("%Y-%m-%d").split('-')
 date = {"month" : sunday[1], "day" : sunday[2]}
-id = 'yjch0908'
-passwd = 'Joochan0908!'
 stime = '11시 00분'
 etime = '13시 00분'
-memberList = [['이현승', '2021-18922', '010-5640-7897', '공과대학 기계공학부'], 
-              ['이록희', '2021-19919', '010-4918-0665', '공과대학 건설환경공학부'],
-              ['박홍근', '2021-11769', '010-2582-0467', '공과대학 재료공학부']
-              ]
+memberList = []
 
 def startReserve():
   # 사이트 접속
@@ -28,8 +23,8 @@ def startReserve():
   driver.get("https://athletics.snu.ac.kr/member/login")
 
   # 로그인
-  driver.find_element(By.NAME, 'userid').send_keys('yjch0908')
-  driver.find_element(By.NAME, 'passwd').send_keys('Joochan0908!')
+  driver.find_element(By.NAME, 'userid').send_keys(id)
+  driver.find_element(By.NAME, 'passwd').send_keys(passwd)
   driver.find_element(By.XPATH,'//*[@id="memberlogin"]/form/div[3]/button').click()
 
   # 예약 화면으로 이동
@@ -89,13 +84,23 @@ def startReserve():
 
   time.sleep(100)
 
-while True:
+if __name__ == '__main__':
+  with open('Account.txt', 'r') as f:
+    id = f.readline().rstrip('\n')
+    passwd = f.readline().rstrip('\n')
 
-  url = 'https://athletics.snu.ac.kr/'
-  server_date = urllib.request.urlopen(url).headers['Date']
-  server_date = server_date.rstrip(' GMT')[5:]
-  server_date = datetime.strptime(server_date, '%d %b %Y %H:%M:%S') + timedelta(hours=9)
-  print(server_date)
-  if server_date.hour == 9 and server_date.minute >= 30:
-    startReserve()
-    break
+  with open('Member.txt', 'r', encoding='utf-8') as file:
+    for line in file:
+        memberList.append(line.strip().split(','))
+  
+  print(memberList)
+
+  while True:
+    url = 'https://athletics.snu.ac.kr/'
+    server_date = urllib.request.urlopen(url).headers['Date']
+    server_date = server_date.rstrip(' GMT')[5:]
+    server_date = datetime.strptime(server_date, '%d %b %Y %H:%M:%S') + timedelta(hours=9)
+    print(server_date)
+    if server_date.hour <= 9 and server_date.minute <= 30:
+      startReserve()
+      break
