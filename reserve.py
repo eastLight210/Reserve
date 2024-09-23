@@ -1,7 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.select import Select
 import urllib.request
 
@@ -16,17 +14,9 @@ date = {"month" : sunday[1], "day" : sunday[2]}
 stime = '11시 00분'
 etime = '13시 00분'
 memberList = []
+global driver
 
 def startReserve():
-  # 사이트 접속
-  driver = webdriver.Chrome(service= Service(ChromeDriverManager().install()))
-  driver.get("https://athletics.snu.ac.kr/member/login")
-
-  # 로그인
-  driver.find_element(By.NAME, 'userid').send_keys(id)
-  driver.find_element(By.NAME, 'passwd').send_keys(passwd)
-  driver.find_element(By.XPATH,'//*[@id="memberlogin"]/form/div[3]/button').click()
-
   # 예약 화면으로 이동
   driver.find_element(By.XPATH, '//*[@id="category-list"]/li[6]').click()
   time.sleep(0.3)
@@ -92,6 +82,13 @@ if __name__ == '__main__':
   with open('Member.txt', 'r', encoding='utf-8') as file:
     for line in file:
         memberList.append(line.strip().split(','))
+
+  # 사이트 접속 및 로그인
+  driver = webdriver.Chrome()
+  driver.get("https://athletics.snu.ac.kr/member/login")
+  driver.find_element(By.NAME, 'userid').send_keys(id)
+  driver.find_element(By.NAME, 'passwd').send_keys(passwd)
+  driver.find_element(By.XPATH,'//*[@id="memberlogin"]/form/div[3]/button').click()
 
   while True:
     url = 'https://athletics.snu.ac.kr/'
