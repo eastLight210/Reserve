@@ -84,7 +84,12 @@ if __name__ == '__main__':
         memberList.append(line.strip().split(','))
 
   # 사이트 접속 및 로그인
-  driver = webdriver.Chrome()
+  chrome_options = webdriver.ChromeOptions()
+  # 이미 실행 중인 Chrome 브라우저에 연결하기 위해 디버깅 포트를 사용한다.
+  # Chrome을 `--remote-debugging-port=9222` 옵션으로 실행해 두면
+  # 새 창을 띄우지 않고 현재 열려 있는 브라우저에서 동작한다.
+  chrome_options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+  driver = webdriver.Chrome(options=chrome_options)
   driver.get("https://athletics.snu.ac.kr/member/login")
   driver.find_element(By.NAME, 'userid').send_keys(id)
   driver.find_element(By.NAME, 'passwd').send_keys(passwd)
